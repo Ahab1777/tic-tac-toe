@@ -1,21 +1,25 @@
 //board object
 
 const Board = (function () {
-    const gameboard = Array(9).fill(null)
+    const gameState = Array(9).fill(null)
 
     function logGame () {
-        console.log(gameboard)
+        console.log(gameState)
     }
 
-    function markSymbol (symbol, position) {
-        gameboard[position] = symbol
+    function assignSymbol(currentPlayer, arrayLocation){
+        //check if location is already marked
+        //assign symbol
+        if(gameState[arrayLocation] === null){
+            gameState[arrayLocation] = currentPlayer.symbol
+        }
     }
 
     function resetBoard () {
-        gameboard.fill(null)
+        gameState.fill(null)
     }
 
-    return {gameboard, markSymbol, logGame, resetBoard}
+    return {gameState, assignSymbol, logGame, resetBoard}
 })()
 
 const Player = (name, symbol) => {
@@ -27,19 +31,40 @@ const GameController = (() => {
 
     player1 = Player('Leo', 'x')
     player2 = Player('Tay', 'o')
+    currentPlayer = player1;
 
-    const winConChecker = (Array, player1, player2) {
-        //check winning condition
-
-        //check winning player
-
-
+    const winningResults = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3 ,6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
     //0 1 2
     //3 4 5
-    //6 7 8    
+    //6 7 8  
+
+    const winConChecker = (BoardGameState, currentPlayer) => { 
+        //check winning condition
+        for (value of winningResults){
+            //descontruct each possible winning condition positioning from reference array
+            const [a, b ,c] = value;
+            if (BoardGameState[a] !== null && BoardGameState[a] === BoardGameState[b] && BoardGameState[b] === BoardGameState[c]){
+                //check if symbol matches current player
+                if(currentPlayer.symbol === BoardGameState[a]){
+                    //declare current player winner
+                    console.log(`${currentPlayer.name} won`)
+                } else {
+                    console.log('Tay/P2 has won')
+                }
+                return gameHasEnded = true
+            }
+        }
+        return gameHasEnded = false;  
+    }
+    //assigning points
+    //change player
+    function computePlay() {
+        if(gameHasEnded){
+            
+        }
     }
 
-
+    //start game
     function initGame() {
         currentPlayer = player1;
         gameHasEnded = false
