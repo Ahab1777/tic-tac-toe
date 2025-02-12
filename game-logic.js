@@ -4,6 +4,9 @@ const Board = (function () {
     //create '3x3' board filles will null
     const gameState = Array(9).fill(null)
 
+    //DELETE - exposing gameState temporarily for debugging 
+    window.gameState = gameState
+
     function getGameState() {
         return [...gameState]
     }

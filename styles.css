@@ -18,12 +18,12 @@
 
 .game-board {
     display: grid;
-    min-width: 380px;
+    min-width: 180px;
     max-width: 500px;
-    min-height: 380px;
+    min-height: 180px;
     max-height: 500px;
-    grid-template-columns: repeat(3, minmax(100px, 1fr));
-    grid-template-rows: repeat(3, minmax(100px, 1fr));
+    grid-template-columns: repeat(3, minmax(50px, 1fr));
+    grid-template-rows: repeat(3, minmax(50px, 1fr));
     gap: 10px;
     background-color:black
 }
