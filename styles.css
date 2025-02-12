@@ -1,0 +1,42 @@
+*{
+    box-sizing: border-box;
+}
+
+.main-container {
+    display: grid;
+    grid-template-rows: 120px 1fr;
+    height: 100vh;
+}
+
+.header-container {
+    text-align: center;
+}
+
+.game-container {
+
+}
+
+.game-board {
+    display: grid;
+    min-width: 380px;
+    max-width: 500px;
+    min-height: 380px;
+    max-height: 500px;
+    grid-template-columns: repeat(3, minmax(100px, 1fr));
+    grid-template-rows: repeat(3, minmax(100px, 1fr));
+    gap: 10px;
+    background-color:black
+}
+
+.board-cell {
+    min-height: ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: azure;
+}
+
+.cell-button {
+    height: 100%;
+    width: 100%;
+}

@@ -4,6 +4,10 @@ const Board = (function () {
     //create '3x3' board filles will null
     const gameState = Array(9).fill(null)
 
+    function getGameState() {
+        return [...gameState]
+    }
+
     function logGame () {
         console.log(gameState[0], gameState[1], gameState[2])
         console.log(gameState[3], gameState[4], gameState[5])
@@ -11,22 +15,19 @@ const Board = (function () {
     }
 
     function assignSymbol(currentPlayer, arrayLocation){
-        //check if location is already marked
-        if(gameState[arrayLocation] === null){
-            //assign symbol
-            gameState[arrayLocation] = currentPlayer.symbol
-        } else {
+        if(gameState[arrayLocation] !== null){ //check if location is already marked
             console.log('position already taken')
-            // TODO prevent player change
-            
-        }
+            return false //return false to cancel runTurn function to proceed
+        } 
+        gameState[arrayLocation] = currentPlayer.symbol;
+        return true //return true to proceed with runTurn function
     }
 
     function resetBoard () {
         gameState.fill(null)
     }
 
-    return {gameState, assignSymbol, logGame, resetBoard}
+    return {getGameState, assignSymbol, logGame, resetBoard}
 })()
 
 const Player = (name, symbol) => {
@@ -40,69 +41,66 @@ const GameController = (() => {
     player1 = Player('Leo', 'x')
     player2 = Player('Tay', 'o')
     currentPlayer = player1;
+    gameHasEnded = false
 
     function changeCurrentPlayer() {
         currentPlayer = currentPlayer === player1 ? player2 : player1
     }
 
-    setGameEnd(gameSituation) {
+    function setGameEnd(gameSituation) {
         gameHasEnded = gameSituation;
     }
 
+    //array of winning board states
     const winningResults = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3 ,6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
     //Based on 3x3 board related to array positioning
     //0 1 2
     //3 4 5
     //6 7 8
     
+    //check if game is a tie
     function tieChecker(BoardGameState) {
-        for(let i = 0; i < BoardGameState.length; i++){
-            if(BoardGameState[i] === null){
-                return false
-            }
-        }
-        return true
+        return BoardGameState.every(item => item !== null);
     }
 
+    //check winning condition
     const winConChecker = (BoardGameState, currentPlayer) => { 
-        //check winning condition
-        for (value of winningResults){
-            //descontruct each possible winning condition positioning from reference array
-            const [a, b ,c] = value;
-            //check if current player has won
-            if (BoardGameState[a] !== null && BoardGameState[a] === BoardGameState[b] && BoardGameState[b] === BoardGameState[c]){
-                //declare current player winner
-                console.log(`${currentPlayer.name} is the WINNER`)
-                setGameEnd(true);
-                return 
+        for (const [a, b ,c] of winningResults){ //deconstruct each possible winning condition from  reference array
+            if (BoardGameState[a] !== null && BoardGameState[a] === BoardGameState[b] && BoardGameState[b] === BoardGameState[c]){ //check if current player has won
+                return true
             }
         }
-        setGameEnd(false)
-        return   
+        return false  
+    }
+
+    function endGame() {
+        currentPlayer = player1;
+        gameHasEnded = false
+        Board.resetBoard()
     }
     
-    //TODO - start game function
-
     const runTurn = (boardPosition) => {
-        //current player assigns marker
-        Board.assignSymbol(currentPlayer, boardPosition);
+        
+        if(!Board.assignSymbol(currentPlayer, boardPosition)){ //assign marker and check if it is a valid play
+            return
+        }
 
-        //game check winCon
-        if(winConChecker(Board.gameState, currentPlayer)){
+        if(winConChecker(Board.getGameState(), currentPlayer)){ //game check winCon
             console.log(`${currentPlayer.name} is the winner!!!`)
             setGameEnd(true);
         } 
         
         //check if it is a tie
-        else if (tieChecker(Board.gameState)){
+        else if (tieChecker(Board.getGameState())){
             console.log('Game is a tie')
             setGameEnd(true);
         }
-
+        //end game or change to next player
         if (gameHasEnded){
             console.log(`End of the game`)
+            endGame()
         } else {
-            changeCurrentPlayer(currentPlayer);
+            changeCurrentPlayer();
         }
         return Board.logGame()
 
@@ -111,4 +109,6 @@ const GameController = (() => {
     return {currentPlayer, winConChecker, changeCurrentPlayer, runTurn}
 })()
 
+
+export { Board, GameController};
 
