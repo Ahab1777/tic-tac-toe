@@ -54,6 +54,13 @@ const GameController = (() => {
         gameHasEnded = gameSituation;
     }
 
+    function getCurrentPlayerName() {
+        return currentPlayer.name;
+    }
+
+    //DELETE - exposing getCurrentPlayerName temporarily for debugging
+    window.getCurrentPlayerName =  getCurrentPlayerName()
+
     //array of winning board states
     const winningResults = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3 ,6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
     //Based on 3x3 board related to array positioning
@@ -109,9 +116,9 @@ const GameController = (() => {
 
     }
   
-    return {currentPlayer, winConChecker, changeCurrentPlayer, runTurn}
+    return {getCurrentPlayerName, currentPlayer, winConChecker, changeCurrentPlayer, runTurn}
 })()
 
 
-export { Board, GameController};
+export {Board, GameController};
 
