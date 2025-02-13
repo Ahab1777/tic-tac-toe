@@ -41,7 +41,9 @@ const DisplayController = (() => {
 
     const handleReset = () => {
         Board.resetBoard()
+        Board.setInfoDisplayMessage('')
         updateCurrentPlayerDisplay()
+        refreshGameStatus()
         refreshBoard()
     }
 
